@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'MockFlowFont1';
+    src: url('./fonts/MockFlowFont1.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  body {
+    @apply bg-mouth;
+  }
+}
