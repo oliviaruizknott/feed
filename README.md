@@ -2,8 +2,6 @@ Hi! We’re* making a game. It’s called “Feed!”. It’s about social media
 
 *“We” is Olivia Ruiz-Knott, Ivan Ruiz-Knott, and Norton King.
 
----
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template. It’s deployed using [GitHub Pages](https://pages.github.com/).
 
 To get up and running locally, clone the repo, then run `npm install` in the project directory.

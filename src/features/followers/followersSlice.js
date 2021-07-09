@@ -6,16 +6,16 @@ export const followersSlice = createSlice({
     value: 0,
   },
   reducers: {
-    increment: (state) => {
+    incrementFollowers: (state) => {
       state.value += 1;
     },
-    decrement: (state) => {
+    decrementFollowers: (state) => {
       state.value -= 1;
     },
   },
 });
 
-export const { increment, decrement } = followersSlice.actions;
+export const { incrementFollowers, decrementFollowers } = followersSlice.actions;
 
 export const selectFollowers = (state) => state.followers.value;
 
