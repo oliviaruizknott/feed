@@ -15,9 +15,9 @@ class FeedContainer extends React.Component {
   // Add a new post every 3 seconds
   componentDidMount() {
     this.addPost(this.createPost());
-    // setInterval(() => {
-    //   this.addPost(this.createPost());
-    // }, 3000);
+    setInterval(() => {
+      this.addPost(this.createPost());
+    }, 3000);
   }
 
   createPost() {
