@@ -5,6 +5,27 @@ import { decrement, increment } from './features/followers/followersSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-regular-svg-icons'
 
+
+var channel_max = 6;										// number of channels
+audiochannels = new Array();
+for (a=0;a<channel_max;a++) {									// prepare the channels
+    audiochannels[a] = new Array();
+    audiochannels[a]['channel'] = new Audio();						// create a new audio object
+    audiochannels[a]['finished'] = -1;							// expected end time for this channel
+}
+function play_multi_sound(s) {
+    for (a=0;a<audiochannels.length;a++) {
+        thistime = new Date();
+        if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
+            audiochannels[a]['finished'] = thistime.getTime() + document.getElementById(s).duration*1000;
+            audiochannels[a]['channel'].src = document.getElementById(s).src;
+            audiochannels[a]['channel'].load();
+            audiochannels[a]['channel'].play();
+            break;
+        }
+    }
+}
+
 const UP = "up";
 const DOWN = "down";
 
@@ -42,9 +63,11 @@ class Reactions extends React.Component {
     ) {
       console.log("CORRECT!");
       this.props.increment();
+      play_multi_sound('audiotag1');
     } else {
       console.log("WRONG!!");
       this.props.decrement();
+      play_multi_sound('audiotag2');
     }
 
     this.props.removePost(postId);
