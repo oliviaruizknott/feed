@@ -1,68 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
+import { generateText } from './app/gameFunctions';
 import Reactions from './Reactions';
 
-var faker = require('faker');
+export function Post(props) {
+  const post = props.post;
+  const [text] = useState(generateText(post));
 
-class Post extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: this.generateText(),
-    }
-  }
-
-  generateText() {
-    const numberOfSentences = (Math.floor(Math.random()*3)) + 1;
-    const text = faker.lorem.sentences(numberOfSentences);
-    const textArray = text.split(" ");
-    const randomIndex = [Math.floor(Math.random()*textArray.length)]
-    const colorClass = this.props.good ? "text-green-500" : "text-red-500";
-
-    return textArray.map((word, i) => {
-      if (i == randomIndex) {
-        return (
-          <span key={faker.datatype.uuid()} className={colorClass}>{word} </span>
-        )
-      } else {
-        return (
-          <span key={faker.datatype.uuid()}>{word} </span>
-        )
-      }
-    })
-  }
-
-  renderContent() {
+  const renderContent = () => {
+    const font = post.instruction ? "font-sans" : "font-mockFlow";
     return (
-      <div className="font-mockFlow mb-4">{this.state.text}</div>
+      <div className={`${font} mb-4`}>{text}</div>
     )
   }
 
-  render() {
-    return (
-      <div className="border-4 border-purple bg-white rounded-lg m-4">
-        <div className="p-4">
-          <div className="flex justify-between">
-            <div className="flex mb-4 items-center">
-              <div className="border border-avatar bg-avatar rounded-full p-1 h-8 w-8 mr-4 text-center text-white">
-                <FontAwesomeIcon icon={faUser} />
-              </div>
-              <div>Name</div>
+  return (
+    <div className="border-4 border-purple bg-white rounded-lg m-4">
+      <div className="p-4">
+        <div className="flex justify-between">
+          <div className="flex mb-4 items-center">
+            <div className="border border-avatar bg-avatar rounded-full p-1 h-8 w-8 mr-4 text-center text-white">
+              <FontAwesomeIcon icon={faUser} />
             </div>
-            <div>Timer</div>
+            <div>Name</div>
           </div>
-          {this.renderContent()}
+          <div>Timer</div>
         </div>
-        <Reactions
-          postId={this.props.id}
-          good={this.props.good}
-          removePost={this.props.removePost}
-        />
+        {renderContent()}
       </div>
-    );
-  }
+      <Reactions post={post} />
+    </div>
+  );
 }
 
 export default Post;

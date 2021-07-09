@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { decrement, increment } from './features/followers/followersSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-regular-svg-icons';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-regular-svg-icons'
-
-const UP = "up";
-const DOWN = "down";
+import { UP, DOWN, GOOD, BAD } from './app/constants';
+import { decrementFollowers, incrementFollowers } from './features/followers/followersSlice';
+import { removePost } from './features/posts/postsSlice';
 
 class Reactions extends React.Component {
   constructor(props) {
@@ -51,22 +50,26 @@ class Reactions extends React.Component {
 
 
   reactionHandler(e) {
-    // If the player clicks the icon instead of the larger button, the id isn’t
-    // right; ensure getting the button’s id
+    // Ensure getting the button’s id, even if the user clicks something more
+    // specific
     const elementId = e.target.closest(".reaction-button").id.split("_");
     const postId = elementId[0];
     const thumb = elementId[1];
 
-    if (
-      (thumb === UP && this.props.good) ||
-      (thumb === DOWN && !this.props.good)
+    if (this.props.post.instruction && thumb === UP) {
+      console.log("CORRECT!")
+      this.props.incrementFollowers();
+      this.play_multi_sound('audiotag1');
+    } else if (
+      (thumb === UP && this.props.post.content === GOOD) ||
+      (thumb === DOWN && this.props.post.content === BAD)
     ) {
       console.log("CORRECT!");
-      this.props.increment();
+      this.props.incrementFollowers();
       this.play_multi_sound('audiotag1');
     } else {
       console.log("WRONG!!");
-      this.props.decrement();
+      this.props.decrementFollowers();
       this.play_multi_sound('audiotag2');
     }
 
@@ -78,7 +81,7 @@ class Reactions extends React.Component {
       const icon = thumb === UP ? faThumbsUp : faThumbsDown;
 
       return (
-        <button key={thumb} id={`${this.props.postId}_${thumb}`} className={`reaction-button p-4 ${this.state.colors[i]}`} onClick={this.reactionHandler}>
+        <button key={thumb} id={`${this.props.post.id}_${thumb}`} className={`reaction-button p-4 ${this.state.colors[i]}`} onClick={this.reactionHandler}>
           <FontAwesomeIcon icon={icon} />
         </button>
       )
@@ -96,5 +99,5 @@ class Reactions extends React.Component {
 
 export default connect(
   null,
-  { decrement, increment }
+  { decrementFollowers, incrementFollowers, removePost }
 )(Reactions);
