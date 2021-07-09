@@ -29,6 +29,27 @@ class Reactions extends React.Component {
       : ["text-red-500", "text-green-500"];
   }
 
+  play_multi_sound(s) {
+    let channel_max = 6;										                          // number of channels
+    let audiochannels = new Array();
+    for (let a=0;a<channel_max;a++) {							                		// prepare the channels
+        audiochannels[a] = new Array();
+        audiochannels[a]['channel'] = new Audio();	                 	// create a new audio object
+        audiochannels[a]['finished'] = -1;						                // expected end time for this channel
+    }
+    for (let a=0;a<audiochannels.length;a++) {
+        let thistime = new Date();
+        if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
+            audiochannels[a]['finished'] = thistime.getTime() + document.getElementById(s).duration*1000;
+            audiochannels[a]['channel'].src = document.getElementById(s).src;
+            audiochannels[a]['channel'].load();
+            audiochannels[a]['channel'].play();
+            break;
+        }
+    }
+  }
+
+
   reactionHandler(e) {
     // If the player clicks the icon instead of the larger button, the id isn’t
     // right; ensure getting the button’s id
@@ -42,9 +63,11 @@ class Reactions extends React.Component {
     ) {
       console.log("CORRECT!");
       this.props.increment();
+      this.play_multi_sound('audiotag1');
     } else {
       console.log("WRONG!!");
       this.props.decrement();
+      this.play_multi_sound('audiotag2');
     }
 
     this.props.removePost(postId);
